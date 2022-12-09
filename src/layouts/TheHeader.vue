@@ -17,10 +17,15 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav me-auto">
 						<li class="nav-item">
-							<a class="nav-link active" aria-current="page" href="#">Home</a>
+							<!-- 라우터로 링크 연결하면 리로딩이 일어나지 않음 -->
+							<RouterLink class="nav-link" to="/" active-class="active">
+								Home
+							</RouterLink>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">About</a>
+							<RouterLink class="nav-link" to="/about" active-class="active">
+								About
+							</RouterLink>
 						</li>
 					</ul>
 					<form class="d-flex" role="search">
@@ -41,10 +46,13 @@
 </template>
 
 <script>
+import { RouterLink } from 'vue-router';
+
 export default {
 	setup() {
 		return {};
 	},
+	components: { RouterLink },
 };
 </script>
 
