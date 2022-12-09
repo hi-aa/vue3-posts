@@ -27,32 +27,32 @@
 								About
 							</RouterLink>
 						</li>
+						<li class="nav-item">
+							<RouterLink class="nav-link" to="/posts" active-class="active">
+								게시글
+							</RouterLink>
+						</li>
 					</ul>
-					<form class="d-flex" role="search">
-						<input
-							class="form-control me-2"
-							type="search"
-							placeholder="Search"
-							aria-label="Search"
-						/>
-						<button class="btn btn-outline-success" type="submit">
-							Search
+					<div class="d-flex">
+						<button class="btn btn-outline-light" type="button" @click="goPage">
+							글쓰기
 						</button>
-					</form>
+					</div>
 				</div>
 			</div>
 		</nav>
 	</header>
 </template>
 
-<script>
-import { RouterLink } from 'vue-router';
+<script setup>
+import { useRouter } from 'vue-router';
 
-export default {
-	setup() {
-		return {};
-	},
-	components: { RouterLink },
+const router = useRouter();
+const goPage = () => {
+	// router.push('/posts/create');
+	router.push({
+		name: 'PostCreate',
+	});
 };
 </script>
 
