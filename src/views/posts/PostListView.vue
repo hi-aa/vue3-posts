@@ -12,10 +12,10 @@
 				></PostItem>
 			</div>
 		</div>
-		<hr class="my-4" />
+		<!-- <hr class="my-4" />
 		<AppCard>
 			<PostDetailView :id="2"></PostDetailView>
-		</AppCard>
+		</AppCard> -->
 	</div>
 </template>
 
@@ -28,8 +28,23 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const posts = ref([]);
-const fetchPosts = () => {
-	posts.value = getPosts();
+// const fetchPosts = () => {
+// 	getPosts()
+// 		.then(response => {
+// 			console.log(response);
+// 			posts.value = response.data;
+// 		})
+// 		.catch(err => {
+// 			console.log(err);
+// 		});
+// };
+const fetchPosts = async () => {
+	// const { data } = await getPosts();
+	// console.dir(data);
+	// posts.value = data;
+
+	// 동일한 방법
+	({ data: posts.value } = await getPosts());
 };
 fetchPosts();
 

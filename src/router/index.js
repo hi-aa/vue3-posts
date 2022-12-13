@@ -1,4 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {
+	createRouter,
+	createWebHashHistory,
+	// createWebHistory,
+} from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
 import AboutView from '@/views/AboutView.vue';
 import PostListView from '@/views/posts/PostListView.vue';
@@ -78,8 +82,15 @@ const routes = [
 ];
 
 const router = createRouter({
-	history: createWebHistory('/'),
+	// 첫번째 인수를 넣으면 url 기본 경로로 동작함
+	// history: createWebHistory(), // 히스토리 모드로 동작
+	history: createWebHashHistory(), // Hash 모드
 	routes,
 });
+
+/**
+ * SAP페이지
+ *
+ */
 
 export default router;
