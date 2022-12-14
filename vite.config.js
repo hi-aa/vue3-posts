@@ -11,4 +11,12 @@ export default defineConfig({
 			'@': fileURLToPath(new URL('./src', import.meta.url)),
 		},
 	},
+	server: {
+		proxy: {
+			'/system': {
+				target: 'http://192.168.0.109:8110',
+				changeOrigin: true,
+			},
+		},
+	},
 });

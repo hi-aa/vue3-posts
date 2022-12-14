@@ -3,12 +3,12 @@
 		<h2>게시글 목록</h2>
 		<hr class="ay-4" />
 		<div class="row g-3">
-			<div v-for="post in posts" :key="post.id" class="col-4">
+			<div v-for="post in posts" :key="post.noticeNo" class="col-4">
 				<PostItem
 					:title="post.title"
-					:content="post.content"
-					:created-at="post.createdAt"
-					@click="goPage(post.id)"
+					:content="post.contents"
+					:created-at="post.regDt"
+					@click="goPage(post.noticeNo)"
 				></PostItem>
 			</div>
 		</div>
@@ -21,8 +21,8 @@
 
 <script setup>
 import PostItem from '@/components/posts/PostItem.vue';
-import PostDetailView from '@/views/posts/PostDetailView.vue';
-import AppCard from '@/components/AppCard.vue';
+// import PostDetailView from '@/views/posts/PostDetailView.vue';
+// import AppCard from '@/components/AppCard.vue';
 import { getPosts } from '@/api/posts.js';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -39,12 +39,12 @@ const posts = ref([]);
 // 		});
 // };
 const fetchPosts = async () => {
-	// const { data } = await getPosts();
-	// console.dir(data);
-	// posts.value = data;
+	const { data } = await getPosts();
+	console.dir(data.data.list);
+	posts.value = data.data.list;
 
 	// 동일한 방법
-	({ data: posts.value } = await getPosts());
+	// ({ data: posts.value } = await getPosts());
 };
 fetchPosts();
 
