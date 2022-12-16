@@ -1,7 +1,7 @@
 <template>
-	<h2>{{ form.title }}</h2>
-	<p>{{ form.content }}</p>
-	<p class="text-muted">{{ form.createAt }}</p>
+	<h2>{{ post.title }}</h2>
+	<p>{{ post.content }}</p>
+	<p class="text-muted">{{ post.createAt }}</p>
 	<hr class="ay-4" />
 	<div class="row g-2">
 		<div class="col-auto">
@@ -18,14 +18,14 @@
 			<button class="btn btn-outline-primary" @click="goEditPage">수정</button>
 		</div>
 		<div class="col-auto">
-			<button class="btn btn-outline-danger">삭제</button>
+			<button class="btn btn-outline-danger" @click="remove">삭제</button>
 		</div>
 	</div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import { getPostById } from '@/api/posts.js';
+import { deletePost, getPostById } from '@/api/posts.js';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -42,16 +42,34 @@ const props = defineProps({
 // reactive
 // 장) .value 필요 없음
 // 단) 객체 할당 불가능
-const form = ref({});
+const post = ref({});
 
-const fetchPost = () => {
-	// const data = getPostById(id);
-	const data = getPostById(props.id);
-	form.value = { ...data }; // 객체 복사해서 대입
-	// form을 ref가 아닌 reactive로 만들면
-	// 여기서 값 대입 시 reactive 반응형을 잃게 됨 // 속성을 하나하나 대입해서 넣어줘야 함
+const fetchPost = async () => {
+	try {
+		const { data } = await getPostById(props.id);
+		setPost(data);
+	} catch (error) {
+		console.error(error);
+	}
 };
 fetchPost();
+
+const setPost = ({ title, content, createdAt }) => {
+	post.value.title = title;
+	post.value.content = content;
+	post.value.createdAt = createdAt;
+};
+
+const remove = async () => {
+	try {
+		if (confirm('삭제하시겠습니까?') === false) return;
+
+		await deletePost(props.id);
+		goListPage();
+	} catch (error) {
+		console.log(error);
+	}
+};
 
 const goListPage = () => {
 	router.push({ name: 'PostList' });
