@@ -40,10 +40,10 @@ const routes = [
 		path: '/posts/:id',
 		name: 'PostDetail',
 		component: PostDetailView,
-		// props: true, // id를 props로 보낼 수 있음
-		props: route => ({
-			id: parseInt(route.params.id), // 속성이나 객체로 넘길수도 있음
-		}),
+		props: true, // id를 props로 보낼 수 있음
+		// props: route => ({
+		// 	id: parseInt(route.params.id), // 속성이나 객체로 넘길수도 있음
+		// }),
 	},
 	{
 		path: '/posts/:id/edit',
