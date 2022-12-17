@@ -1,30 +1,30 @@
 <template>
-	<Transition name="slide">
-		<div class="app-alert alert" :class="styleClass" role="alert" v-if="show">
-			{{ message }}
-		</div>
-	</Transition>
+	<!-- Alert을 여러개 호출할 때 -->
+	<div class="app-alert">
+		<TransitionGroup name="slide">
+			<!-- object에서 일부 속성만 빼올 때 구조분해 할당을 쓰나 봄
+        const {a, b} = new Object({a: '1', b: 'blabla', c: 'test'} -->
+			<div
+				v-for="({ message, type }, index) in items"
+				:key="index"
+				class="alert"
+				:class="styleClass(type)"
+				role="alert"
+			>
+				{{ message }}
+			</div>
+		</TransitionGroup>
+	</div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
-
-const props = defineProps({
-	show: {
-		type: Boolean,
-		default: false,
-	},
-	message: { type: String, required: true },
-	type: {
-		type: String,
-		default: 'error',
-		validator: value => ['success', 'error'].includes(value),
-	},
+defineProps({
+	items: { type: Array },
 });
 
-const styleClass = computed(() => {
-	return props.type === 'error' ? 'alert-danger' : 'alert-success';
-});
+const styleClass = type => {
+	return type === 'error' ? 'alert-danger' : 'alert-success';
+};
 </script>
 
 <style scoped>
