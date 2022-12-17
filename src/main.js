@@ -11,7 +11,7 @@ app.mount('#app');
 
 import 'bootstrap/dist/js/bootstrap.js';
 
-console.log(import.meta.env.MODE); // development
-console.log(import.meta.env.BASE_URL); // /
-console.log(import.meta.env.PROD); // false
-console.log(import.meta.env.DEV); // true
+// console.log(import.meta.env.MODE); // development
+// console.log(import.meta.env.BASE_URL); // /
+// console.log(import.meta.env.PROD); // false
+// console.log(import.meta.env.DEV); // true
