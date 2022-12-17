@@ -33,7 +33,7 @@ const router = useRouter();
 // const id = route.params.id;
 // => route를 통해 가져오는 값을 props: true로 설정해서 props로 받게 할 수 있음
 const props = defineProps({
-	id: Number,
+	id: [String, Number],
 });
 
 // ref
