@@ -6,8 +6,7 @@ export function getPosts(params) {
 }
 
 export function getPostById(id) {
-	// return posts.get('/', `/${id}`);
-	return posts.get(id); // string이면 그냥 보낼 수 있음 // 둘다 가능
+	return posts.get('/', `/${id}`);
 }
 
 export function createPost(data) {
