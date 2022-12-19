@@ -1,7 +1,7 @@
 import {
 	createRouter,
-	createWebHashHistory,
-	// createWebHistory,
+	// createWebHashHistory,
+	createWebHistory,
 } from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
 import AboutView from '@/views/AboutView.vue';
@@ -9,7 +9,7 @@ import PostListView from '@/views/posts/PostListView.vue';
 import PostCreateView from '@/views/posts/PostCreateView.vue';
 import PostDetailView from '@/views/posts/PostDetailView.vue';
 import PostEditView from '@/views/posts/PostEditView.vue';
-import NotFoundView from '@/components/posts/NotFoundView.vue';
+import NotFoundView from '@/components/NotFoundView.vue';
 import NestedView from '@/views/nested/NestedView.vue';
 import NestedOneView from '@/views/nested/NestedOneView.vue';
 import NestedTwoView from '@/views/nested/NestedTwoView.vue';
@@ -40,10 +40,10 @@ const routes = [
 		path: '/posts/:id',
 		name: 'PostDetail',
 		component: PostDetailView,
-		// props: true, // id를 props로 보낼 수 있음
-		props: route => ({
-			id: parseInt(route.params.id), // 속성이나 객체로 넘길수도 있음
-		}),
+		props: true, // id를 props로 보낼 수 있음
+		// props: route => ({
+		// 	id: parseInt(route.params.id), // 속성이나 객체로 넘길수도 있음
+		// }),
 	},
 	{
 		path: '/posts/:id/edit',
@@ -83,8 +83,8 @@ const routes = [
 
 const router = createRouter({
 	// 첫번째 인수를 넣으면 url 기본 경로로 동작함
-	// history: createWebHistory(), // 히스토리 모드로 동작
-	history: createWebHashHistory(), // Hash 모드
+	history: createWebHistory(), // 히스토리 모드로 동작
+	// history: createWebHashHistory(), // Hash 모드
 	routes,
 });
 

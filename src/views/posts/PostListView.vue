@@ -1,54 +1,82 @@
 <template>
 	<div>
 		<h2>게시글 목록</h2>
+		<hr class="my-4" />
+		<PostFilter
+			v-model:title="listParams.title_like"
+			v-model:limit="listParams._limit"
+		></PostFilter>
+
 		<hr class="ay-4" />
-		<div class="row g-3">
-			<div v-for="post in posts" :key="post.id" class="col-4">
+		<AppGrid :items="posts">
+			<template v-slot="{ item }">
 				<PostItem
-					:title="post.title"
-					:content="post.content"
-					:created-at="post.createdAt"
-					@click="goPage(post.id)"
+					:title="item.title"
+					:content="item.content"
+					:created-at="item.createdAt"
+					@click="goPage(item.id)"
+					@modal="openModal(item)"
 				></PostItem>
-			</div>
-		</div>
-		<!-- <hr class="my-4" />
-		<AppCard>
-			<PostDetailView :id="2"></PostDetailView>
-		</AppCard> -->
+			</template>
+		</AppGrid>
+
+		<AppPagination
+			:current-page="listParams._page"
+			:page-count="pageCount"
+			@page="page => (listParams._page = page)"
+		/>
+
+		<Teleport to="#modal">
+			<PostModal
+				v-model="show"
+				:title="modalTitle"
+				:content="modalContent"
+				:created-at="modalCreatedAt"
+			></PostModal>
+		</Teleport>
 	</div>
 </template>
 
 <script setup>
-import PostItem from '@/components/posts/PostItem.vue';
-import PostDetailView from '@/views/posts/PostDetailView.vue';
-import AppCard from '@/components/AppCard.vue';
 import { getPosts } from '@/api/posts.js';
-import { ref } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
-
-const posts = ref([]);
-// const fetchPosts = () => {
-// 	getPosts()
-// 		.then(response => {
-// 			console.log(response);
-// 			posts.value = response.data;
-// 		})
-// 		.catch(err => {
-// 			console.log(err);
-// 		});
-// };
-const fetchPosts = async () => {
-	// const { data } = await getPosts();
-	// console.dir(data);
-	// posts.value = data;
-
-	// 동일한 방법
-	({ data: posts.value } = await getPosts());
-};
-fetchPosts();
+import PostItem from '@/components/posts/PostItem.vue';
+import PostFilter from '@/components/posts/PostFilter.vue';
+import PostModal from '@/components/posts/PostModal.vue';
 
 const router = useRouter();
+const posts = ref([]);
+
+const listParams = ref({
+	_sort: 'createdAt',
+	_order: 'desc',
+	_page: 1,
+	_limit: 3,
+	title_like: '',
+});
+const totalCount = ref(0);
+const pageCount = computed(() => {
+	return Math.ceil(totalCount.value / listParams.value._limit);
+});
+
+const fetchPosts = async () => {
+	try {
+		const { data, headers } = await getPosts(listParams.value);
+		// console.dir(headers);
+		posts.value = data;
+		totalCount.value = headers['x-total-count'];
+
+		// 동일한 방법
+		// ({ data: posts.value } = await getPosts());
+	} catch (error) {
+		console.log(error);
+	}
+};
+// fetchPosts();
+watchEffect(fetchPosts);
+// watchEffect...!
+
 const goPage = id => {
 	// 1. 그냥 url 입력해서 이동하는 방법
 	// router.push(`/posts/${id}`);
@@ -62,6 +90,19 @@ const goPage = id => {
 		// query: { searchText: 'hello' },
 		// hash: '#world',
 	});
+};
+
+// modal
+const show = ref(false);
+const modalTitle = ref('');
+const modalContent = ref('');
+const modalCreatedAt = ref('');
+
+const openModal = ({ title, content, createdAt }) => {
+	show.value = true;
+	modalTitle.value = title;
+	modalContent.value = content;
+	modalCreatedAt.value = createdAt;
 };
 </script>
 
