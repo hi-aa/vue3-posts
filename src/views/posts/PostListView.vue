@@ -42,8 +42,6 @@ import { getPosts } from '@/api/posts.js';
 import { ref, computed, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import PostItem from '@/components/posts/PostItem.vue';
-import AppGrid from '@/components/AppGrid.vue';
-import AppPagination from '@/components/posts/AppPagination.vue';
 import PostFilter from '@/components/posts/PostFilter.vue';
 import PostModal from '@/components/posts/PostModal.vue';
 
