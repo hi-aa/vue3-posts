@@ -9,12 +9,13 @@ const defaultConfig = {
 const defaultOptions = {
 	immediate: true,
 };
+
 // axios 호출 시 공통으로 하는 작업(loading bar, error, result 등등)
 export const useAxios = (url, config = {}, options = {}) => {
 	const response = ref(null);
 	const data = ref(null);
-	const loading = ref(false);
 	const error = ref(null);
+	const loading = ref(false);
 
 	// 구조분해 할당 시 ref가 아닌 reactive를 사용하면 값을 받긴 하는데 반응성이 끊어짐
 	const { params } = config;
@@ -24,7 +25,7 @@ export const useAxios = (url, config = {}, options = {}) => {
 		data.value = null;
 		error.value = null;
 		loading.value = true;
-		axios(url, {
+		axios(unref(url), {
 			...defaultConfig,
 			...config,
 			// Composable 함수는 반응성에 의존하지 않아도 ref 파라메터를 입력값으로 받을 수 있음
@@ -36,13 +37,13 @@ export const useAxios = (url, config = {}, options = {}) => {
 				response.value = res;
 				data.value = res.data;
 				if (onSuccess) {
-					onSuccess();
+					onSuccess(res);
 				}
 			})
 			.catch(err => {
 				error.value = err;
 				if (onError) {
-					onError();
+					onError(err);
 				}
 			})
 			.finally(() => {
@@ -51,7 +52,7 @@ export const useAxios = (url, config = {}, options = {}) => {
 	};
 
 	// watch를 실행할지 여부
-	if (isRef(params)) {
+	if (isRef(params) || isRef(url)) {
 		watchEffect(execute);
 	} else {
 		if (immediate) execute();

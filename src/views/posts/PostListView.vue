@@ -22,6 +22,7 @@
 						:created-at="item.createdAt"
 						@click="goPage(item.id)"
 						@modal="openModal(item)"
+						@preview="selectPreview(item.id)"
 					></PostItem>
 				</template>
 			</AppGrid>
@@ -40,18 +41,29 @@
 				:created-at="modalCreatedAt"
 			></PostModal>
 		</Teleport>
+
+		<template v-if="previewId">
+			<hr class="my-4" />
+			<AppCard>
+				<PostDetailView :id="previewId" />
+			</AppCard>
+		</template>
 	</div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
+import PostDetailView from '@/views/posts/PostDetailView.vue';
 import PostItem from '@/components/posts/PostItem.vue';
 import PostFilter from '@/components/posts/PostFilter.vue';
 import PostModal from '@/components/posts/PostModal.vue';
 import { useAxios } from '@/hooks/useAxios';
 
 const router = useRouter();
+
+const previewId = ref(null);
+const selectPreview = id => (previewId.value = id);
 
 const params = ref({
 	_sort: 'createdAt',
@@ -89,6 +101,7 @@ const goPage = id => {
 };
 
 // modal
+const dayjs = inject('dayjs');
 const show = ref(false);
 const modalTitle = ref('');
 const modalContent = ref('');
@@ -98,7 +111,7 @@ const openModal = ({ title, content, createdAt }) => {
 	show.value = true;
 	modalTitle.value = title;
 	modalContent.value = content;
-	modalCreatedAt.value = createdAt;
+	modalCreatedAt.value = dayjs(createdAt).format('YYYY.MM.DD HH:mm:ss');
 };
 </script>
 

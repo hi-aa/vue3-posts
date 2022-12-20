@@ -54,6 +54,7 @@
 import { useRouter } from 'vue-router';
 import { useAlert } from '@/composables/alert';
 import { useAxios } from '@/hooks/useAxios';
+import { computed } from 'vue';
 
 const { vAlert, vSuccess } = useAlert();
 
@@ -62,7 +63,11 @@ const props = defineProps({
 	id: [String, Number],
 });
 
-const { data: post, error, loading } = useAxios(`/posts/${props.id}`);
+// 조회
+const url = computed(() => `/posts/${props.id}`);
+const { data: post, error, loading } = useAxios(url);
+
+// 삭제
 const {
 	error: removeError,
 	loading: removeLoading,
