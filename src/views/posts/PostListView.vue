@@ -2,30 +2,36 @@
 	<div>
 		<h2>게시글 목록</h2>
 		<hr class="my-4" />
+
 		<PostFilter
-			v-model:title="listParams.title_like"
-			v-model:limit="listParams._limit"
+			v-model:title="params.title_like"
+			v-model:limit="params._limit"
 		></PostFilter>
 
 		<hr class="ay-4" />
-		<AppGrid :items="posts">
-			<template v-slot="{ item }">
-				<PostItem
-					:title="item.title"
-					:content="item.content"
-					:created-at="item.createdAt"
-					@click="goPage(item.id)"
-					@modal="openModal(item)"
-				></PostItem>
-			</template>
-		</AppGrid>
+		<AppLoading v-if="loading" />
 
-		<AppPagination
-			:current-page="listParams._page"
-			:page-count="pageCount"
-			@page="page => (listParams._page = page)"
-		/>
+		<AppError :message="error.message" v-else-if="error" />
 
+		<template v-else>
+			<AppGrid :items="posts">
+				<template v-slot="{ item }">
+					<PostItem
+						:title="item.title"
+						:content="item.content"
+						:created-at="item.createdAt"
+						@click="goPage(item.id)"
+						@modal="openModal(item)"
+					></PostItem>
+				</template>
+			</AppGrid>
+
+			<AppPagination
+				:current-page="params._page"
+				:page-count="pageCount"
+				@page="page => (params._page = page)"
+			/>
+		</template>
 		<Teleport to="#modal">
 			<PostModal
 				v-model="show"
@@ -38,44 +44,34 @@
 </template>
 
 <script setup>
-import { getPosts } from '@/api/posts.js';
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import PostItem from '@/components/posts/PostItem.vue';
 import PostFilter from '@/components/posts/PostFilter.vue';
 import PostModal from '@/components/posts/PostModal.vue';
+import { useAxios } from '@/hooks/useAxios';
 
 const router = useRouter();
-const posts = ref([]);
 
-const listParams = ref({
+const params = ref({
 	_sort: 'createdAt',
 	_order: 'desc',
 	_page: 1,
 	_limit: 3,
 	title_like: '',
 });
-const totalCount = ref(0);
 const pageCount = computed(() => {
-	return Math.ceil(totalCount.value / listParams.value._limit);
+	return Math.ceil(totalCount.value / params.value._limit);
 });
 
-const fetchPosts = async () => {
-	try {
-		const { data, headers } = await getPosts(listParams.value);
-		// console.dir(headers);
-		posts.value = data;
-		totalCount.value = headers['x-total-count'];
-
-		// 동일한 방법
-		// ({ data: posts.value } = await getPosts());
-	} catch (error) {
-		console.log(error);
-	}
-};
-// fetchPosts();
-watchEffect(fetchPosts);
-// watchEffect...!
+// data를 posts에 바로 할당..
+const {
+	response,
+	data: posts,
+	error,
+	loading,
+} = useAxios('/posts', { method: 'get', params });
+const totalCount = computed(() => response.value.headers['x-total-count']);
 
 const goPage = id => {
 	// 1. 그냥 url 입력해서 이동하는 방법
