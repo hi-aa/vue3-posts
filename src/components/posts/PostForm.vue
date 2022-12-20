@@ -3,6 +3,7 @@
 		<div class="mb-3">
 			<label for="title" class="form-label">제목</label>
 			<input
+				v-focus
 				type="text"
 				class="form-control"
 				id="title"
@@ -27,6 +28,13 @@
 </template>
 
 <script setup>
+// // 커스텀 디렉티브 등록
+// const vFocus = {
+// 	mounted: el => {
+// 		el.focus();
+// 	},
+// };
+
 defineProps({
 	title: String,
 	content: String,
