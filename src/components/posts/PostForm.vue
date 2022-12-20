@@ -4,6 +4,7 @@
 			<label for="title" class="form-label">제목</label>
 			<input
 				v-focus
+				v-color="'red'"
 				type="text"
 				class="form-control"
 				id="title"

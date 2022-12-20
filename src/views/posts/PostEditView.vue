@@ -4,7 +4,7 @@
 	<PostForm
 		v-model:title="form.title"
 		v-model:content="form.content"
-		@submit.prevent="edit"
+		@submit.prevent
 	>
 		<template #actions>
 			<button type="button" class="btn btn-outline-dark" @click="goDetailPage">
@@ -13,8 +13,6 @@
 			<button class="btn btn-primary" @click="edit">저장</button>
 		</template>
 	</PostForm>
-
-	<AppAlert :items="alerts"></AppAlert>
 </template>
 
 <script setup>
@@ -22,13 +20,16 @@ import { getPostById, updatePost } from '@/api/posts';
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import PostForm from '@/components/posts/PostForm.vue';
+import { useAlert } from '@/composables/alert';
+
+const { vAlert, vSuccess } = useAlert();
 
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
 
 const form = ref({});
-const alerts = ref([]);
+// const alerts = ref([]);
 
 const fetchPost = async () => {
 	try {
@@ -50,20 +51,21 @@ const setPost = ({ title, content, createdAt }) => {
 const edit = async () => {
 	try {
 		await updatePost(id, { ...form.value });
-		// router.push({ name: 'PostDetail', params: { id } });
-		vAlert('수정이 완료되었습니다.', 'success');
+		vSuccess('수정이 완료되었습니다.');
+		router.push({ name: 'PostDetail', params: { id } });
 	} catch (error) {
 		// console.log(error);
 		vAlert(error.message);
 	}
 };
 
-const vAlert = (message, type = 'error') => {
-	alerts.value.push({ message, type });
-	setTimeout(() => {
-		alerts.value.shift();
-	}, 3000);
-};
+// const vAlert = (message, type = 'error') => {
+// 	alerts.value.push({ message, type });
+// 	setTimeout(() => {
+// 		alerts.value.shift();
+// 	}, 3000);
+// };
+// const vSuccess = message => vAlert(message, 'success');
 
 const goDetailPage = () => {
 	router.push({
