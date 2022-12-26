@@ -5,7 +5,7 @@
 			<!-- object에서 일부 속성만 빼올 때 구조분해 할당을 쓰나 봄
         const {a, b} = new Object({a: '1', b: 'blabla', c: 'test'} -->
 			<div
-				v-for="({ message, type }, index) in items"
+				v-for="({ message, type }, index) in alerts"
 				:key="index"
 				class="alert"
 				:class="styleClass(type)"
@@ -18,9 +18,11 @@
 </template>
 
 <script setup>
-defineProps({
-	items: { type: Array },
-});
+// defineProps({
+// 	items: { type: Array },
+// });
+import { useAlert } from '@/composables/alert';
+const { alerts } = useAlert();
 
 const styleClass = type => {
 	return type === 'error' ? 'alert-danger' : 'alert-success';

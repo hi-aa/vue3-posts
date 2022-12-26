@@ -11,6 +11,30 @@
       "content": "게시글11",
       "createdAt": 1672013832994,
       "id": 16
+    },
+    {
+      "title": "등록6",
+      "content": "3ㅇㅇ",
+      "createdAt": 1672016513831,
+      "id": 17
+    },
+    {
+      "title": "등록8",
+      "content": "ㅇㅇ",
+      "createdAt": 1672016542456,
+      "id": 18
+    },
+    {
+      "title": "등록9",
+      "content": "ㅌㅌㅋㄴㅇㅇ",
+      "createdAt": 1672016586685,
+      "id": 19
+    },
+    {
+      "title": "등록10",
+      "content": "ㅇㅇㅊㅊ",
+      "createdAt": 1672016604859,
+      "id": 20
     }
   ]
 }
