@@ -5,6 +5,7 @@
 
 	<div v-else>
 		<h2>{{ post.title }}</h2>
+		<p>{{ props.id }} , isOdd: {{ isOdd }}</p>
 		<p>{{ post.content }}</p>
 		<p class="text-muted">
 			{{ $dayjs(post.createdAt).format('YYYY.MM.DD HH:mm:ss') }}
@@ -54,7 +55,8 @@
 import { useRouter } from 'vue-router';
 import { useAlert } from '@/composables/alert';
 import { useAxios } from '@/hooks/useAxios';
-import { computed } from 'vue';
+import { computed, toRef, toRefs } from 'vue';
+import { useNumber } from '@/composables/number';
 
 const { vAlert, vSuccess } = useAlert();
 
@@ -64,8 +66,16 @@ const props = defineProps({
 });
 
 // 조회
-const url = computed(() => `/posts/${props.id}`);
+const url = computed(() => `/posts/${props.id}`); // id 변경 시 재조회(반응형)
 const { data: post, error, loading } = useAxios(url);
+
+// toRef
+// const { isOdd } = useNumber(`${props.id}`); // .id로 뽑아냈기 때문에 반응형을 잃음
+// const idRef = toRef(props, 'id');
+
+// toRefs
+const { id: idRef } = toRefs(props);
+const { isOdd } = useNumber(idRef);
 
 // 삭제
 const {
