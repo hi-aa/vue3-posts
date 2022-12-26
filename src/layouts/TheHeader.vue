@@ -37,6 +37,11 @@
 								Nested
 							</RouterLink>
 						</li>
+						<li class="nav-item">
+							<RouterLink class="nav-link" to="/my" active-class="active">
+								My Page
+							</RouterLink>
+						</li>
 					</ul>
 					<div class="d-flex">
 						<button class="btn btn-outline-light" type="button" @click="goPage">

@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { useAlert } from '@/composables/alert';
 import { useAxios } from '@/hooks/useAxios';
 import { computed, toRef, toRefs } from 'vue';
@@ -107,6 +107,24 @@ const goListPage = () => {
 };
 const goEditPage = () => {
 	router.push({ name: 'PostEdit', params: { id: props.id } });
+};
+
+// 경로 변경 시 실행
+onBeforeRouteUpdate(() => {
+	console.log('onBeforeRouteUpdate');
+});
+// 페이지를 떠날 때 실행
+onBeforeRouteLeave(() => {
+	console.log('onBeforeRouteLeave');
+});
+</script>
+
+<script>
+export default {
+	// 페이지 진입 시 실행
+	beforeRouteEnter() {
+		console.log('beforeRouteEnter');
+	},
 };
 </script>
 

@@ -14,6 +14,7 @@ import NestedView from '@/views/nested/NestedView.vue';
 import NestedOneView from '@/views/nested/NestedOneView.vue';
 import NestedTwoView from '@/views/nested/NestedTwoView.vue';
 import NestedHomeView from '@/views/nested/NestedHomeView.vue';
+import MyPageView from '@/views/MyPage.vue';
 
 const routes = [
 	{
@@ -79,7 +80,28 @@ const routes = [
 			},
 		],
 	},
+	{
+		path: '/my',
+		name: 'MyPage',
+		component: MyPageView,
+		// beforeEnter: (to, from) => {
+		// 	console.log({ to, from });
+		// 	// return false;
+		// 	// return { name: 'Home' };
+
+		// 	// if (Object.keys(to.query).length > 0) {
+		// 	// 	return { path: to.path, query: {} }; // query string 제거를 위해 redirection
+		// 	// }
+		// },
+		beforeEnter: [removeQueryString],
+	},
 ];
+
+function removeQueryString(to) {
+	if (Object.keys(to.query).length > 0) {
+		return { path: to.path, query: {} }; // query string 제거를 위해 redirection
+	}
+}
 
 const router = createRouter({
 	// 첫번째 인수를 넣으면 url 기본 경로로 동작함
@@ -88,9 +110,14 @@ const router = createRouter({
 	routes,
 });
 
-/**
- * SAP페이지
- *
- */
+// 전역
+// router.beforeEach((to, from) => {
+// 	console.log({ to, from });
+// 	if (to.name === 'MyPage') {
+// 		// return false; // 페이지 이동 막음
+// 		// router.push({ name: 'Home' }); // redirect
+// 		return '/';
+// 	}
+// });
 
 export default router;
