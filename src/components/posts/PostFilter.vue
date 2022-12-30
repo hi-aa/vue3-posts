@@ -6,8 +6,9 @@
 					type="text"
 					class="form-control"
 					:value="title"
-					@input="$emit('update:title', $event.target.value)"
+					@input="changeTitle"
 				/>
+				<!-- @input="$emit('update:title', $event.target.value)" -->
 			</div>
 			<div class="col">
 				<select
@@ -29,7 +30,13 @@ defineProps({
 	title: String,
 	limit: Number,
 });
-defineEmits(['update:title', 'update:limit']);
+const emit = defineEmits(['update:title', 'update:limit']);
+
+const changeTitle = e => {
+	setTimeout(() => {
+		emit('update:title', e.target.value);
+	}, 500);
+};
 </script>
 
 <style lang="scss" scoped></style>

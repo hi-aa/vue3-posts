@@ -5,13 +5,18 @@
 
 		<PostFilter
 			v-model:title="params.title_like"
-			v-model:limit="params._limit"
+			:limit="params._limit"
+			@update:limit="changeLimit"
 		></PostFilter>
 
 		<hr class="ay-4" />
 		<AppLoading v-if="loading" />
 
 		<AppError :message="error.message" v-else-if="error" />
+
+		<template v-else-if="!isExist">
+			<p>No Data</p>
+		</template>
 
 		<template v-else>
 			<AppGrid :items="posts">
@@ -76,6 +81,11 @@ const pageCount = computed(() => {
 	return Math.ceil(totalCount.value / params.value._limit);
 });
 
+const changeLimit = value => {
+	params.value._limit = value;
+	params.value._page = 1;
+};
+
 // data를 posts에 바로 할당..
 const {
 	response,
@@ -84,6 +94,8 @@ const {
 	loading,
 } = useAxios('/posts', { method: 'get', params });
 const totalCount = computed(() => response.value.headers['x-total-count']);
+
+const isExist = computed(() => posts.value && posts.value.length > 0);
 
 const goPage = id => {
 	// 1. 그냥 url 입력해서 이동하는 방법
